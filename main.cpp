@@ -12,9 +12,9 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Game of Life");
 
     // Store randomly generated dead and alive cells in 2D vector
-    //std::vector<std::vector<RectangleShape>> grid = Utils::genArray(n, WIDTH, HEIGHT);
+    std::vector<std::vector<RectangleShape>> grid = Utils::genArray(n, WIDTH, HEIGHT);
 
-    std::vector<std::vector<RectangleShape>> grid;
+    /* std::vector<std::vector<RectangleShape>> grid;
     for(int i = 0; i < n; i++) {
         std::vector<RectangleShape> row;
         for(int j = 0; j < n; j++) {
@@ -34,7 +34,7 @@ int main() {
             row.push_back(cell);
         }
         grid.push_back(row);
-    }
+    } */
 
     // Render loop
     while (window.isOpen())
@@ -46,7 +46,7 @@ int main() {
                 window.close();
         }
 
-        std::vector<std::vector<RectangleShape>> next = Utils::checkNeighbours(grid);
+        std::vector<std::vector<RectangleShape>> next = Utils::checkNeighbours(grid, n);
         
         next = Utils::updateVector(next);
 

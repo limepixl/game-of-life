@@ -9,17 +9,14 @@ private:
     Utils() {}
 
 public:
-    static bool checkCell(std::vector<RectangleShape> neighbours) {
+    static int checkCell(std::vector<RectangleShape> neighbours) {
         int sum = 0;
         for(int i = 0; i < neighbours.size(); i++) { 
             if(neighbours.at(i).value) {
                 sum++;
             }
         }
-        if(sum < 2 || sum > 3)
-            return false;
-        else 
-            return true;
+        return sum;
     }
     
     // Generate an array of rectangle shapes with randomized values.
@@ -52,24 +49,27 @@ public:
     }
 
     // Check each neighbour to see if it will die or live in the next generation
-    static std::vector<std::vector<RectangleShape>> checkNeighbours(std::vector<std::vector<RectangleShape>> grid) {
+    static std::vector<std::vector<RectangleShape>> checkNeighbours(std::vector<std::vector<RectangleShape>> grid, int n) {
         std::vector<std::vector<RectangleShape>> next;
         next = grid;
 
-        for(int i = 1; i < grid.size()-1; i++) {
-            for(int j = 1; j < grid.size()-1; j++) {
+        for(int i = 0; i < grid.size(); i++) {
+            for(int j = 0; j < grid.size(); j++) {
                 // Store all neighbours of each cell in a vector
-                std::vector<RectangleShape> neighbours(8);
+                std::vector<RectangleShape> neighbours;
                 for(int k = -1; k < 2; k++) {
                     for(int l = -1; l < 2; l++) {
                         if(!(k == 0 && l == 0))
-                            neighbours.push_back(grid.at(i+k).at(j+l));
+                            neighbours.push_back(grid.at((i+k+n)%n).at((j+l+n)%n));
                     }
                 }
 
                 // Check neighbours of each cell
-                bool state = checkCell(neighbours);
-                next.at(i).at(j).value = state;                
+                int sum = checkCell(neighbours);
+                if(sum < 2 || sum > 3)
+                    next.at(i).at(j).value = false;  
+                else if(sum == 3 && !grid.at(i).at(j).value)
+                    next.at(i).at(j).value = true;
             }
         }
 
