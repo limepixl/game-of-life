@@ -9,6 +9,7 @@ private:
     Utils() {}
 
 public:
+    // Check the neighbours of a cell and add up the number of alive cells
     static int checkCell(std::vector<RectangleShape> neighbours) {
         int sum = 0;
         for(int i = 0; i < neighbours.size(); i++) { 
@@ -76,6 +77,7 @@ public:
         return next;
     }
 
+    // Update vector entries (rectangle shapes) to update the fill color of each cell
     static std::vector<std::vector<RectangleShape>> updateVector(std::vector<std::vector<RectangleShape>> grid) {
         for(int i = 0; i < grid.size(); i++) {
             for(int j = 0; j < grid.size(); j++) {
