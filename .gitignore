@@ -1,2 +1,9 @@
 .vscode
 main
+Debug
+Release
+.vs
+*.sln
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
