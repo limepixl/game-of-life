@@ -10,6 +10,7 @@ int main() {
 
 	// Create render window
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Game of Life");
+	window.setFramerateLimit(60);
 
 	std::vector<std::vector<RectangleShape>> grid;
 
