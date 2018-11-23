@@ -24,7 +24,6 @@ public:
     // width / height - the dimensions of the window
     static void genArray(std::vector<std::vector<RectangleShape>>& grid, int n, unsigned int width, unsigned int height) {
         std::srand(time(nullptr));
-		grid.reserve(n);
 
         for(int i = 0; i < n; i++) {
             std::vector<RectangleShape> row;
@@ -52,6 +51,7 @@ public:
         for(unsigned int j = 0; j < grid.size(); j++) {
             // Store all neighbours of each cell in a vector
             std::vector<RectangleShape> neighbours;
+			neighbours.reserve(8);
             for(int k = -1; k < 2; k++)
             for(int l = -1; l < 2; l++) {
                     if(!(k == 0 && l == 0))
@@ -74,7 +74,7 @@ public:
                 if(grid[i][j].value)
                     grid[i][j].setFillColor(sf::Color(255,255,255,255));
                 else  
-                    grid[i][j].setFillColor(sf::Color(0,0,0,255));                    
+                    grid[i][j].setFillColor(sf::Color::Transparent);                    
         }
     }
 };
