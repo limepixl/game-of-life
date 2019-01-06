@@ -4,9 +4,9 @@
 
 int main() {
 	// Constants
-	const unsigned int WIDTH = 600;
-	const unsigned int HEIGHT = 600;
-	const int n = 200;
+	const unsigned int WIDTH = 800;
+	const unsigned int HEIGHT = 800;
+	const int n = 500;
 
 	// Create render window
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Game of Life");
@@ -18,6 +18,8 @@ int main() {
 	// Store randomly generated dead and alive cells in 2D vector
 	Utils::genArray(grid, n, WIDTH, HEIGHT); 
 
+	std::vector<std::vector<RectangleShape>> next = grid;
+
 	// Render loop
 	while(window.isOpen()) {
 		sf::Event event;
@@ -26,8 +28,7 @@ int main() {
 				window.close();
 		}
 
-		Utils::checkNeighbours(grid, n);
-		Utils::updateVector(grid);
+		Utils::checkNeighbours(grid, next, n);
 
 		window.clear(sf::Color(0, 0, 0, 255));
 
