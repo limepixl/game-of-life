@@ -7,7 +7,7 @@ int main()
 	// Constants
 	const unsigned int WIDTH = 800;
 	const unsigned int HEIGHT = 800;
-	const int n = 500;
+	const int n = 100;
 
 	// Create render window
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Game of Life");
