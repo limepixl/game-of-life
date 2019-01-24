@@ -16,9 +16,9 @@ void checkNeighbours(std::vector<State>& grid, std::vector<State>& next, int row
 int main()
 {
 	// Constants
-	const int WIDTH = 800;
-	const int HEIGHT = 600;
-	const int size = 100;
+	const int WIDTH = 1280;
+	const int HEIGHT = 720;
+	const int size = 5;
 	const int rows = WIDTH / size;	// Number of cells in each row
 	const int cols = HEIGHT / size;	// Number of cells in each collumn
 
@@ -110,13 +110,18 @@ void checkNeighbours(std::vector<State>& grid, std::vector<State>& next, int row
 		// Store all neighbours of each cell in a vector
 		std::vector<State> neighbours;
 		
-		// TODO: Implement checking
+		for(int k = -1; k < 2; k++)
+		for(int l = -1; l < 2; l++)
+		{
+			if(!(k == 0 && l == 0))
+				neighbours.push_back(grid[((i + l + rows) % rows) * cols + ((j + k + cols) % cols)]);
+		}
 
 		// Check neighbours of each cell
 		int sum = checkCell(neighbours);
 		if(sum < 2 || sum > 3)
-			next[i + j * rows] = DEAD;
-		else if(sum == 3 && grid[i + j * rows] == DEAD)
-			next[i + j * rows] = ALIVE;;
+			next[j + i * cols] = DEAD;
+		else if(sum == 3 && grid[j + i * cols] == DEAD)
+			next[j + i * cols] = ALIVE;
 	}
 }
