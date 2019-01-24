@@ -1,25 +1,47 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Utils.h"
+
+enum State
+{
+	DEAD,
+	ALIVE
+};
+
+void genArray(std::vector<State>& grid, int rows, int cols);
+
+int checkCell(std::vector<State>& neighbours);
+
+void checkNeighbours(std::vector<State>& grid, std::vector<State>& next, int rows, int cols);
 
 int main()
 {
 	// Constants
-	const unsigned int WIDTH = 800;
-	const unsigned int HEIGHT = 800;
-	const int n = 500;
+	const int WIDTH = 800;
+	const int HEIGHT = 600;
+	const int size = 100;
+	const int rows = WIDTH / size;	// Number of cells in each row
+	const int cols = HEIGHT / size;	// Number of cells in each collumn
 
 	// Create render window
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Game of Life");
 	window.setFramerateLimit(60);
 
-	std::vector<std::vector<RectangleShape>> grid;
-	grid.reserve(n*n);
+	std::vector<sf::RectangleShape> cells;
+	std::vector<State> states;
 
-	// Store randomly generated dead and alive cells in 2D vector
-	Utils::genArray(grid, n, WIDTH, HEIGHT);
+	for(int i = 0; i < rows; i++)
+	for(int j = 0; j < cols; j++)
+	{
+		sf::RectangleShape cell(sf::Vector2f(size, size));
+		cell.setPosition(sf::Vector2f((float)size * i, (float)size * j));
+		cell.setFillColor(sf::Color(255, 255, 255, 255));
+		cells.push_back(cell);
+	}
 
-	std::vector<std::vector<RectangleShape>> next = grid;
+	// Store randomly generated dead and alive cell states
+	genArray(states, rows, cols);
+
+	std::vector<State> next;
 
 	// Render loop
 	while(window.isOpen())
@@ -31,19 +53,70 @@ int main()
 				window.close();
 		}
 
-		Utils::checkNeighbours(grid, next, n);
+		next = states;
+
+		checkNeighbours(states, next, rows, cols);
 
 		window.clear(sf::Color(0, 0, 0, 255));
 
-		for(int i = 0; i < n; i++)
-			for(int j = 0; j < n; j++)
-			{
-				if(grid[i][j].value)
-					window.draw(grid[i][j]);
-			}
+		for(int i = 0; i < rows; i++)
+		for(int j = 0; j < cols; j++)
+		{
+			int currentPos = i + j * rows;
+			if(states[currentPos] == ALIVE)
+				window.draw(cells[currentPos]);
+		}
+
+		states = next;
 
 		window.display();
 	}
 
 	return 0;
+}
+
+// Generate an array of rectangle shapes with randomized values.
+void genArray(std::vector<State>& grid, int rows, int cols)
+{
+	std::srand(time(nullptr));
+
+	for(int i = 0; i < rows; i++)
+	for(int j = 0; j < cols; j++)
+		grid.push_back((State)(std::rand() % 2));
+}
+
+// Check the neighbours of a cell and add up the number of alive cells
+int checkCell(std::vector<State>& neighbours)
+{
+	int sum = 0;
+	for(unsigned int i = 0; i < neighbours.size(); i++)
+	{
+		if(neighbours[i] == ALIVE)
+		{
+			sum++;
+		}
+	}
+	return sum;
+}
+
+// Check each neighbour to see if it will die or live in the next generation
+void checkNeighbours(std::vector<State>& grid, std::vector<State>& next, int rows, int cols)
+{
+	for(int i = 0; i < rows; i++)
+	for(int j = 0; j < cols; j++)
+	{
+		int currentPos = i + j * cols;
+
+		// Store all neighbours of each cell in a vector
+		std::vector<State> neighbours;
+		
+		// TODO: Implement checking
+
+		// Check neighbours of each cell
+		int sum = checkCell(neighbours);
+		if(sum < 2 || sum > 3)
+			next[i + j * rows] = DEAD;
+		else if(sum == 3 && grid[i + j * rows] == DEAD)
+			next[i + j * rows] = ALIVE;;
+	}
 }
