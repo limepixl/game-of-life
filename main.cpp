@@ -2,19 +2,9 @@
 #include <iostream>
 #include <ctime>
 
-int countNeighbors(bool grid[], int index, int rows, int cols)
+// Count the neighbors of each cell
+int countNeighbors(bool grid[], int index, int cols)
 {
-	/*
-	bool tl = grid[index - cols - 1];
-	bool t =  grid[index - cols];
-	bool tr = grid[index - cols + 1];
-	bool l =  grid[index - 1];
-	bool r =  grid[index + 1];
-	bool bl = grid[index + cols - 1];
-	bool b =  grid[index + cols];
-	bool br = grid[index + cols + 1];
-	*/
-
 	int sum = 0;
 	for(int i = -1; i < 2; i++)
 	for(int k = -1; k < 2; k++)
@@ -57,8 +47,11 @@ int main()
 	sf::RectangleShape cell(sf::Vector2f(PIXLWIDTH, PIXLWIDTH));
 	cell.setFillColor(sf::Color::White);
 
+	// Temporary grid
+	bool copy[ROWS * COLS];
     while (window.isOpen())
     {
+		// Event processing
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -68,17 +61,18 @@ int main()
 
         window.clear();
 
-		bool copy[ROWS * COLS];
 		for(int i = 0; i < COLS; i++)
 		for(int j = 0; j < ROWS; j++)
 		{
+			// If the cell is alive draw it
 			if(grid[i + j*COLS])
 			{
 				cell.setPosition(i*PIXLWIDTH, j*PIXLWIDTH);
 				window.draw(cell);
 			}
 
-			int n = countNeighbors(grid, i + j*COLS, ROWS, COLS);
+			// Calculate offspring
+			int n = countNeighbors(grid, i + j*COLS, COLS);
 			if((n == 2 || n == 3) && grid[i + j*COLS])
 				copy[i + j*COLS] = true;
 			else if((n==3) && !grid[i + j*COLS])
@@ -87,6 +81,7 @@ int main()
 				copy[i+j*COLS] = false;
 		}
 
+		// Set temp grid as main one
 		for(int i = 0; i < COLS; i++)
 		for(int j = 0; j < ROWS; j++)
 			grid[i + j*COLS] = copy[i + j*COLS];
