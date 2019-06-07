@@ -1,10 +1,9 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.14)
 
 project(game_of_life)
 
-set(SFML_DIR "usr/lib/cmake/SFML")
-set(SFML_STATIC_LIBRARIES FALSE)
+set(SFML_STATIC_LIBRARIES TRUE)
+find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
-find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
-add_executable(game_of_life main.cpp)
-target_link_libraries(game_of_life sfml-graphics)
+add_executable(${PROJECT_NAME} "main.cpp")
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)
